@@ -30,14 +30,12 @@ function Movies() {
           )}&page=${page}`,
         );
 
-        if (!response.ok) {
-          throw new Error("Unable to connect to the API.");
-        }
-
         const data = await response.json();
 
-        if (data.Response === "False") {
-          throw new Error(data.Error);
+        if (!response.ok || data.Response === "False") {
+          throw new Error(
+            `${data.Error || "Request failed"} (HTTP ${response.status})`,
+          );
         }
 
         setMovies(data.Search || []);
