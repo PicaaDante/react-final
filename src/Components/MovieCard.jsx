@@ -1,20 +1,25 @@
 import { Link } from "react-router-dom";
 
 function MovieCard({ movie }) {
-  const poster = 
-  movie.Poster !== "N/A"
-  ? movie.Poster
-  : "https://via.placeholder.com/300x450?text=No+Poster";
-
   return (
-    <article>
+    <article className="movie-card">
       <Link to={`/movies/${movie.imdbID}`}>
-        <img src={poster} alt={movie.Title} />
-        <h2>{movie.Title}</h2>
-        <p>{movie.Year}</p>
+        {movie.Poster && movie.Poster !== "N/A" ? (
+          <img
+            className="movie-card__img"
+            src={movie.Poster}
+            alt={movie.Title}
+          />
+        ) : (
+          <div className="movie-card__poster-placeholder">
+            Movie Poster Not Available
+          </div>
+        )}
+        <h2 className="movie-card__title">{movie.Title}</h2>
+        <p className="movie-card__year">{movie.Year}</p>
       </Link>
     </article>
-  )
+  );
 }
 
 export default MovieCard;

@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import MovieCard from "../Components/MovieCard";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 function Movies() {
-  const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q") || "";
+
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [sortBy, setSortBy] = useState("");
@@ -17,7 +18,15 @@ function Movies() {
   const totalPages = Math.ceil(totalResults / 10) || 1;
 
   useEffect(() => {
-    if (!query) return;
+    setPage(1);
+  }, [query]);
+
+  useEffect(() => {
+    if (!query) {
+      setMovies([]);
+      setTotalResults(0);
+      return;
+    }
 
     const fetchMovies = async () => {
       try {
@@ -30,12 +39,14 @@ function Movies() {
           )}&page=${page}`,
         );
 
+        if (!response.ok) {
+          throw new Error("Unable to connect to the API.");
+        }
+
         const data = await response.json();
 
-        if (!response.ok || data.Response === "False") {
-          throw new Error(
-            `${data.Error || "Request failed"} (HTTP ${response.status})`,
-          );
+        if (data.Response === "False") {
+          throw new Error(data.Error);
         }
 
         setMovies(data.Search || []);
@@ -53,66 +64,49 @@ function Movies() {
   }, [query, page]);
 
   const sortedMovies = [...movies].sort((a, b) => {
-    if (sortBy === "title-asc") {
-      return a.Title.localeCompare(b.Title);
-    }
-    if (sortBy === "title-desc") {
-      return b.Title.localeCompare(a.Title);
-    }
-    if (sortBy === "year-asc") {
+    if (sortBy === "title-asc") return a.Title.localeCompare(b.Title);
+    if (sortBy === "title-desc") return b.Title.localeCompare(a.Title);
+    if (sortBy === "year-asc")
       return (parseInt(a.Year) || 0) - (parseInt(b.Year) || 0);
-    }
-    if (sortBy === "year-desc") {
+    if (sortBy === "year-desc")
       return (parseInt(b.Year) || 0) - (parseInt(a.Year) || 0);
-    }
     return 0;
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const trimmedSearch = search.trim();
-    if (!trimmedSearch) return;
-
-    setPage(1);
-    setQuery(trimmedSearch);
-  };
-
   return (
-    <main>
-      <h1>Movie Search</h1>
+    <main className="main">
+      <div className="controls">
+        <p>{query ? `Showing: ${query}` : "Search for a movie"}</p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search for a movie"
-        />
-        <button type="submit">Search</button>
-      </form>
-
-      {query && (
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-          <option value="">Sort</option>
-          <option value="title-asc">Title (A–Z)</option>
-          <option value="title-desc">Title (Z–A)</option>
-          <option value="year-asc">Year (Oldest)</option>
-          <option value="year-desc">Year (Newest)</option>
-        </select>
-      )}
+        {query && (
+          <label>
+            Sort:{""}
+            <select
+              id="sortSelect"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="">Default</option>
+              <option value="title-asc">Title (A–Z)</option>
+              <option value="title-desc">Title (Z–A)</option>
+              <option value="year-asc">Year (Oldest)</option>
+              <option value="year-desc">Year (Newest)</option>
+            </select>
+          </label>
+        )}
+      </div>
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
-      <div>
+      <div className="movies-grid">
         {sortedMovies.map((movie) => (
           <MovieCard key={movie.imdbID} movie={movie} />
         ))}
       </div>
 
       {query && !loading && !error && totalResults > 0 && (
-        <div>
+        <div className="pagination">
           <button
             type="button"
             disabled={page <= 1}
@@ -120,11 +114,9 @@ function Movies() {
           >
             Previous
           </button>
-
           <span>
             Page {page} of {totalPages}
           </span>
-
           <button
             type="button"
             disabled={page >= totalPages}

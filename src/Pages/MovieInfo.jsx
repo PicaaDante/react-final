@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
 function MovieInfo() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -44,46 +45,99 @@ function MovieInfo() {
   }, [id]);
 
   if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
     return (
-      <main>
-        <Link to="/movies">Back to Search</Link>
-        <p>{error}</p>
+      <main className="main">
+        <p>Loading...</p>
       </main>
     );
   }
 
-  if (!movie) {
-    return null;
+  if (error) {
+    return (
+      <main className="main">
+        <div className="movie-details__container">
+          <div className="movie-details__back">
+            <button
+              className="movie-details__back-button"
+              onClick={() => navigate(-1)}
+            >
+              ← Back
+            </button>
+          </div>
+          <p>{error}</p>
+        </div>
+      </main>
+    );
   }
 
-  const poster =
-    movie.Poster !== "N/A"
-      ? movie.Poster
-      : "https://via.placeholder.com/300x450?text=No+Poster";
+  if (!movie) return null;
 
   return (
-    <main>
-      <Link to="/movies">Back to Search</Link>
-      <h1>{movie.Title}</h1>
-      <img src={poster} alt={movie.Title} />
-      <p>{movie.Year}</p>
-      <p>{movie.Plot}</p>
-      <p>
-        <strong>Genre:</strong> {movie.Genre}
-      </p>
-      <p>
-        <strong>Rated:</strong> {movie.Rated}
-      </p>
-      <p>
-        <strong>Runtime:</strong> {movie.Runtime}
-      </p>
-      <p>
-        <strong>IMDB:</strong> {movie.imdbRating}
-      </p>
+    <main className="main">
+      <div className="movie-details__container">
+        <div className="movie-details__back">
+          <button
+            className="movie-details__back-button"
+            onClick={() => navigate(-1)}
+          >
+            ← Back
+          </button>
+        </div>
+
+        <div className="movie-details__content">
+          <div className="movie-details__poster--wrapper">
+            {movie.Poster && movie.Poster !== "N/A" ? (
+              <img
+                className="movie-details__poster"
+                src={movie.Poster}
+                alt={movie.Title}
+              />
+            ) : (
+              <div className="movie-details__poster-placeholder">
+                Movie Poster Not Available
+              </div>
+            )}
+
+            <div className="movie-details__info">
+              <h1 className="movie-details__title">{movie.Title}</h1>
+              <p className="movie-details__year">Year: {movie.Year}</p>
+              <p className="movie-details__rating">
+                Rating: {movie.imdbRating}/10
+              </p>
+              <p className="movie-details__released">
+                Released: {movie.Released}
+              </p>
+            </div>
+          </div>
+
+          <div className="movie-details__text--wrapper">
+            <div className="movie-details__detail">
+              <h3>Genre</h3>
+              <p>{movie.Genre}</p>
+            </div>
+            <div className="movie-details__detail">
+              <h3>Writer</h3>
+              <p>{movie.Writer}</p>
+            </div>
+            <div className="movie-details__detail">
+              <h3>Actors</h3>
+              <p>{movie.Actors}</p>
+            </div>
+            <div className="movie-details__detail">
+              <h3>Plot</h3>
+              <p>{movie.Plot}</p>
+            </div>
+            <div className="movie-details__detail">
+              <h3>Language</h3>
+              <p>{movie.Language}</p>
+            </div>
+            <div className="movie-details__detail">
+              <h3>Awards</h3>
+              <p>{movie.Awards}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
