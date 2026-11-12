@@ -165,7 +165,7 @@ function MovieInfo() {
         setError("");
 
         const response = await fetch(
-          `https://www.omdbapi.com/?apikey=${API_KEY}&i=${encodeURIComponent(id)}`
+          `https://www.omdbapi.com/?apikey=${API_KEY}&i=${encodeURIComponent(id)}`,
         );
 
         if (!response.ok) {
@@ -173,6 +173,7 @@ function MovieInfo() {
         }
 
         const data = await response.json();
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
         if (data.Response === "False") {
           throw new Error(data.Error || "Movie not found.");
@@ -204,21 +205,23 @@ function MovieInfo() {
           </div>
           <div className="movie-details__content">
             <div className="movie-details__poster--wrapper">
-              <div className="movie-details__poster-placeholder skeletal"></div>
-              <div className="movie-details__info">
-                <h1 className="movie-details__title skeletal"></h1>
-                <p className="movie-details__year skeletal"></p>
-                <p className="movie-details__rating skeletal"></p>
-                <p className="movie-details__released skeletal"></p>
+              <div className="movie-details__poster--skeleton"></div>
+              <div className="movie-details__info--skeleton">
+                <div className="movie-details__title--skeleton"></div>
+                <div className="movie-details__year--skeleton"></div>
+                <div className="movie-details__rating--skeleton"></div>
+                <div className="movie-details__released--skeleton"></div>
               </div>
             </div>
-            <div className="movie-details__text--wrapper">
-              <div className="movie-details__detail skeletal"></div>
-              <div className="movie-details__detail skeletal"></div>
-              <div className="movie-details__detail skeletal"></div>
-              <div className="movie-details__detail skeletal"></div>
-              <div className="movie-details__detail skeletal"></div>
-              <div className="movie-details__detail skeletal"></div>
+            <div className="movie-details__detail--skeleton">
+              <div className="movie-details__detail-title--skeleton"></div>
+              <div className="movie-details__detail-text--skeleton"></div>
+              <div className="movie-details__detail-text--skeleton"></div>
+            </div>
+            <div className="movie-details__detail--skeleton">
+              <div className="movie-details__detail-title--skeleton"></div>
+              <div className="movie-details__detail-text--skeleton"></div>
+              <div className="movie-details__detail-text--skeleton"></div>
             </div>
           </div>
         </div>
@@ -272,7 +275,7 @@ function MovieInfo() {
               </div>
             )}
 
-            <div className="movie-details__info">
+            <div className="movie-details__info--skeleton">
               <h1 className="movie-details__title">{movie.Title}</h1>
               <p className="movie-details__year">Year: {movie.Year}</p>
               <p className="movie-details__rating">
