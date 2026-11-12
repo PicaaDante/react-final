@@ -96,14 +96,27 @@ function Movies() {
         )}
       </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {loading && (
+        <div className="movies-grid">
+          {Array.from({ length: 10 }, (_, i) => (
+            <div key={i} className="movie-card movie-card--skeleton">
+              <div className="movie-card__img--skeleton"></div>
+              <div className="movie-card__title--skeleton"></div>
+              <div className="movie-card__year--skeleton"></div>
+            </div>
+          ))}
+        </div>
+      )}
 
-      <div className="movies-grid">
-        {sortedMovies.map((movie) => (
-          <MovieCard key={movie.imdbID} movie={movie} />
-        ))}
-      </div>
+      {!loading && error && <p>{error}</p>}
+
+      {!loading && !error && (
+        <div className="movies-grid">
+          {sortedMovies.map((movie) => (
+            <MovieCard key={movie.imdbID} movie={movie} />
+          ))}
+        </div>
+      )}
 
       {query && !loading && !error && totalResults > 0 && (
         <div className="pagination">
@@ -131,3 +144,4 @@ function Movies() {
 }
 
 export default Movies;
+

@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import Home from "../Pages/Home";
 import Movies from "../Pages/Movies";
 import MovieInfo from "../Pages/MovieInfo";
+import Footer from "./Footer";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="movies" element={<Movies />} />
         <Route path="movies/:id" element={<MovieInfo />} />
+        <Route path="*" element={<Footer />} />
       </Route>
     </Routes>
   );
