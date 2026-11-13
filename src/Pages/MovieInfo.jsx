@@ -66,15 +66,37 @@ function MovieInfo() {
                 <div className="movie-details__released--skeleton"></div>
               </div>
             </div>
-            <div className="movie-details__detail--skeleton">
-              <div className="movie-details__detail-title--skeleton"></div>
-              <div className="movie-details__detail-text--skeleton"></div>
-              <div className="movie-details__detail-text--skeleton"></div>
-            </div>
-            <div className="movie-details__detail--skeleton">
-              <div className="movie-details__detail-title--skeleton"></div>
-              <div className="movie-details__detail-text--skeleton"></div>
-              <div className="movie-details__detail-text--skeleton"></div>
+            <div className="movie-details__text--wrapper">
+              <div className="movie-details__detail--skeleton">
+                <div className="movie-details__detail-title--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+              </div>
+              <div className="movie-details__detail--skeleton">
+                <div className="movie-details__detail-title--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+              </div>
+              <div className="movie-details__detail--skeleton">
+                <div className="movie-details__detail-title--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+              </div>
+              <div className="movie-details__detail--skeleton">
+                <div className="movie-details__detail-title--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+              </div>
+              <div className="movie-details__detail--skeleton">
+                <div className="movie-details__detail-title--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+              </div>
+              <div className="movie-details__detail--skeleton">
+                <div className="movie-details__detail-title--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+                <div className="movie-details__detail-text--skeleton"></div>
+              </div>
             </div>
           </div>
         </div>
